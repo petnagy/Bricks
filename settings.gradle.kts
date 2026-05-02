@@ -24,4 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Bricks"
 include(":app")
- 
+include(":version")
