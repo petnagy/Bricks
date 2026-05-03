@@ -10,13 +10,13 @@ data class VersionNumber(
     val buildType: BuildType? = null,
     val buildHash: String? = null
 ) {
-    class Builder(private val versionName: String, private val versionCode: Int) {
+    class Builder(private val versionName: String, private val versionCode: Int?) {
         private var buildType: BuildType? = null
         private var buildHash: String? = null
 
-        fun buildType(buildType: BuildType) = apply { this.buildType = buildType }
+        fun buildType(buildType: BuildType?) = apply { this.buildType = buildType }
 
-        fun buildHash(buildHash: String) = apply { this.buildHash = buildHash }
+        fun buildHash(buildHash: String?) = apply { this.buildHash = buildHash }
 
         private fun parseVersionNum(number: String, versionPart: String): Int = try {
             number.toInt()

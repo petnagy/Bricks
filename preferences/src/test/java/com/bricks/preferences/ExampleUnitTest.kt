@@ -1,4 +1,4 @@
-package com.bricks.version
+package com.bricks.preferences
 
 import org.junit.Test
 
