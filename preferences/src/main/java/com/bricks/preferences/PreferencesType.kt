@@ -1,5 +1,6 @@
 package com.bricks.preferences
 
 enum class PreferencesType {
-    SHARED_PREFERENCES
+    SHARED_PREFERENCES,
+    PREFERENCES_DATASTORE
 }

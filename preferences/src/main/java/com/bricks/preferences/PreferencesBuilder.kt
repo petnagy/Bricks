@@ -1,6 +1,13 @@
 package com.bricks.preferences
 
 import android.content.Context
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStoreFile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
 class PreferencesBuilder(private val context: Context) {
     private lateinit var preferencesType: PreferencesType
@@ -21,11 +28,21 @@ class PreferencesBuilder(private val context: Context) {
 
         return when(preferencesType) {
             PreferencesType.SHARED_PREFERENCES -> buildSharedPReferences(context, prefName, mode)
+            PreferencesType.PREFERENCES_DATASTORE -> buildPreferencesDataStore(context, prefName)
         }
     }
 
     private fun buildSharedPReferences(context: Context, name: String, mode: Int): Preferences {
         val sharedPreferences = context.getSharedPreferences(name, mode)
         return AndroidSharedPreferences(sharedPreferences)
+    }
+
+    private fun buildPreferencesDataStore(context: Context, name: String): Preferences {
+        val dataStore = PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+            produceFile = { context.preferencesDataStoreFile(name = name) }
+        )
+        return DataStorePreferences(dataStore)
     }
 }
